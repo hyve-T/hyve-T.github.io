@@ -14,9 +14,6 @@ Defragmenter::Defragmenter(DiskDrive *diskDrive) {
     for (int i = 0; i < diskDrive->getCapacity(); i++)
         correct[i] = false;
     
-//    for(int i = 0; i < diskDrive->getCapacity(); i++)
-//        parallelDir[i] = new unsigned short[2];
-    
     
     calcStartPos(diskDrive, startPos); //array will be used to calculate all block desired positions, and set firstBlockIDs in Directory
     
@@ -25,9 +22,6 @@ Defragmenter::Defragmenter(DiskDrive *diskDrive) {
     defrag(diskDrive, startPos, parallelDir, correct); //main loop  
     
     delete [] startPos;
-    
-//    for(int i = 0; i < diskDrive->getCapacity(); i++)
-//        delete [] parallelDir[i];
     
     delete [] parallelDir;
 
@@ -46,16 +40,13 @@ void Defragmenter::calcStartPos(DiskDrive* diskDrive, unsigned* startPos) {
 
 void Defragmenter::createDir(DiskDrive *diskDrive, pair<unsigned short, unsigned short> *parallelDir, bool* correct, unsigned* startPos) {
 
-//    unsigned short fileNum;
-    int pos;
+	int pos;
     DiskBlock* tempBlockPtr = NULL;
     
 
     for (int i = 0; i < diskDrive->getNumFiles(); i++) {    //for each file
 
         pos = diskDrive->directory[i].getFirstBlockID();
-
-//        fileNum = diskDrive->directory[i].getFileID();
 
         for (unsigned short j = 0; j < diskDrive->directory[i].getSize(); j++) {    //for each block of the file
             //traverse and mark pos (as you're following nextBlockID) with fileNum and j
@@ -78,10 +69,7 @@ void Defragmenter::defrag(DiskDrive *diskDrive, unsigned* startPos, pair<unsigne
 
     //bool* correct = new bool[diskDrive->getCapacity()];
     DiskBlock* tempBlockPtr = NULL;
-            
-    //for (int i = 0; i < diskDrive->getCapacity(); i++)
-    //    correct[i] = false;
-
+    
     for (unsigned i = 2; i < (unsigned)diskDrive->getCapacity(); i++) { //checks every spot in file
         //if bool correct true or value is  0 0 0, skip
         //else if pos incorrect, reorder(i) and set bool true
@@ -106,7 +94,8 @@ void Defragmenter::defrag(DiskDrive *diskDrive, unsigned* startPos, pair<unsigne
 }
 
 void Defragmenter::reorder(DiskDrive *diskDrive, pair<unsigned short, unsigned short> *parallelDir, unsigned pos, unsigned* startPos, bool* correct) {
-    //diskDrive is original, parallelDir is parallel, pos is where we start sorting, startPos is array of starting positions, correct is whether or not it's handled
+    
+//diskDrive is original, parallelDir is parallel, pos is where we start sorting, startPos is array of starting positions, correct is whether or not it's handled
     unsigned tempPos = pos, originalSpot = pos;
     DiskBlock* tempBlockPtr = diskDrive->readDiskBlock(tempPos);
     DiskBlock tempBlock = *(tempBlockPtr), currBlock; delete tempBlockPtr;
